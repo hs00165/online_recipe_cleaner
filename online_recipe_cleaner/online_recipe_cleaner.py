@@ -6,7 +6,7 @@ import string
 from bs4 import BeautifulSoup
 import csv
 from numpy import genfromtxt
-import funcs
+import online_funcs
 import pandas as pd
 import pickle
 

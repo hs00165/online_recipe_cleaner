@@ -1,0 +1,9 @@
+re
+io
+requests
+BeautifulSoup
+pandas
+streamlit
+nltk
+textwrap
+pickle
