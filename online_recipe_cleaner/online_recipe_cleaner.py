@@ -35,11 +35,11 @@ def main():
 	st.set_page_config(layout="wide")
 
 
-	st.title("Recipe Cleaner v1")
+	st.title("Recipe Cleaner")
 
-	st.subheader("Get rid of those futocking recipe blogs! - Harry Sims")
+	st.subheader("An A.I. powered app designed to bypass food blogs, generating an easy-to-follow recipe.")
 
-	web_address=st.text_input("Enter a website")
+	web_address=st.text_input("Recipe URL:")
 
 	col1, col2 = st.beta_columns(2)
 
@@ -47,13 +47,13 @@ def main():
 
 	if clean_command:
 		# Now need to pull in section list from the webpage and generate the vector for each section
-		section_list, section_list_prettify = funcs.get_section_list_test(web_address)
+		section_list, section_list_prettify = online_funcs.get_section_list_test(web_address)
 		section_matrix = []
 
 		for section in section_list:
 		    # = Editting the section to have no punctuation, use stemming be form a list =
 		    # ============================================================================
-		    final_section_text = funcs.process_section(section)
+		    final_section_text = online_funcs.process_section(section)
 		    section_matrix.append(final_section_text)
 
 		ingredients_record_score = 0.0
@@ -67,7 +67,7 @@ def main():
 			if(len(section) >= 5):
 
 				section_temp = [word for word in section if not word in stopwords.words('english')]
-				section_sub = funcs.listToString(section_temp)
+				section_sub = online_funcs.listToString(section_temp)
 				section_test = [section_sub]
 
 				ingredients_section_vector = ingredients_cv.transform(section_test)
@@ -100,7 +100,7 @@ def main():
 				st.subheader("Ingredients")
 				st.success("Score = "+str(ingredients_record_score))
 				st.write("")
-				for i in funcs.format_section(section_list_prettify[ingredient_element_number]):
+				for i in online_funcs.format_section(section_list_prettify[ingredient_element_number]):
 					st.write("-- "+str(i))
 
 			else:
@@ -109,7 +109,7 @@ def main():
 				st.error(" cannot identify ingredients with certainty")
 				st.error(" Score = "+str(ingredients_record_score))
 				st.write("")
-				for j in funcs.format_section(section_list_prettify[ingredient_element_number]):
+				for j in online_funcs.format_section(section_list_prettify[ingredient_element_number]):
 					st.write("-- "+str(j))
 
 
@@ -118,7 +118,7 @@ def main():
 				st.subheader("Instructions")
 				st.success("Score = "+str(instructions_record_score))
 				st.write("")
-				for k in funcs.format_section(section_list_prettify[instructions_element_number]):
+				for k in online_funcs.format_section(section_list_prettify[instructions_element_number]):
 					st.write(k)
 			else:
 				st.error("        ***WARNING***")
@@ -126,7 +126,7 @@ def main():
 				st.error(" cannot identify instructions with certainty")
 				st.error(" Score = "+str(instructions_record_score))
 				st.write("")
-				for l in funcs.format_section(section_list_prettify[instructions_element_number]):
+				for l in online_funcs.format_section(section_list_prettify[instructions_element_number]):
 					st.write(l)
 
 
