@@ -6,7 +6,7 @@ import string
 from bs4 import BeautifulSoup
 import csv
 from numpy import genfromtxt
-import funcs
+import online_funcs
 import pandas as pd
 import pickle
 
@@ -33,13 +33,13 @@ instructions_cv = pickle.load(open("instructions_vectorizer.pkl","rb"))
 
 
 # Now need to pull in section list from the webpage and generate the vector for each section
-section_list, section_list_prettify = funcs.get_section_list_test(web_address)
+section_list, section_list_prettify = online_funcs.get_section_list(web_address)
 section_matrix = []
 
 for section in section_list:
     # = Editting the section to have no punctuation, use stemming be form a list =
     # ============================================================================
-    final_section_text = funcs.process_section(section)
+    final_section_text = online_funcs.process_section(section)
     section_matrix.append(final_section_text)
 
 ingredients_record_score = 0.0
@@ -53,7 +53,7 @@ for section in section_matrix:
 	if(len(section) >= 5):
 
 		section_temp = [word for word in section if not word in stopwords.words('english')]
-		section_sub = funcs.listToString(section_temp)
+		section_sub = online_funcs.listToString(section_temp)
 		section_test = [section_sub]
 
 		ingredients_section_vector = ingredients_cv.transform(section_test)
@@ -85,7 +85,7 @@ print("============================================")
 print(" Ingredients            Score = "+str(ingredients_record_score))
 print("============================================")
 print("")
-for i in funcs.format_section(section_list_prettify[ingredient_element_number]):
+for i in online_funcs.format_section(section_list_prettify[ingredient_element_number]):
 	print("--- "+str(i))
 
 
@@ -94,5 +94,5 @@ print(" Instructions           Score = "+str(instructions_record_score))
 print("============================================")
 print("")
 
-for j in funcs.format_section(section_list_prettify[instructions_element_number]):
+for j in online_funcs.format_section(section_list_prettify[instructions_element_number]):
 	print("--- "+str(j))
