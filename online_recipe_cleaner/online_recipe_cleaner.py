@@ -19,11 +19,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 
-ingredients_model = pickle.load(open("../ingredients_model.pkl","rb"))
-ingredients_cv = pickle.load(open("../ingredients_vectorizer.pkl","rb"))
+path = os.path.dirname(__file__)
+my_file = path+'/photo.png'
 
-instructions_model = pickle.load(open("../instructions_model.pkl","rb"))
-instructions_cv = pickle.load(open("../instructions_vectorizer.pkl","rb"))
+ingredients_model = pickle.load(open(path+"/ingredients_model.pkl","rb"))
+ingredients_cv = pickle.load(open(path+"/ingredients_vectorizer.pkl","rb"))
+
+instructions_model = pickle.load(open(path+"/instructions_model.pkl","rb"))
+instructions_cv = pickle.load(open(path+"/instructions_vectorizer.pkl","rb"))
 
 
 
