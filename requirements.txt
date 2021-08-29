@@ -4,3 +4,4 @@ pandas
 streamlit
 nltk
 pickle-mixin
+scikit-learn
