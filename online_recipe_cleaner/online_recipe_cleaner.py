@@ -77,7 +77,7 @@ def main():
 	col1, col2, col3= st.columns((2.5,0.3,1))
 
 	with col1:
-		# st.image(path+"/logo.png", width = 500)
+		st.image(path+"/logo.PNG", width = 500)
 		st.subheader("An A.I.-powered app designed to bypass food blogs and generate an easy-to-follow recipe.")
 		st.write("By Harrison Sims - for personal use only.")
 		st.write("")
@@ -303,8 +303,8 @@ def main():
 				# st.write(st.session_state.image_list[st.session_state.displayed_image_number].attrs['src'])
 				# st.write(image_score_record)
 				st.image(st.session_state.image_list[st.session_state.displayed_image_number].attrs['src'], use_column_width=True)
-			# if st.session_state.displayed_image_number == -1:
-			# 	st.image(path+"/no_image.png", use_column_width=True)
+			if st.session_state.displayed_image_number == -1:
+				st.image(path+"/no_image.PNG", use_column_width=True)
 
 
 main()
