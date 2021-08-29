@@ -74,7 +74,7 @@ def main():
 
 
 
-	col1, col2, col3= st.beta_columns((2.5,0.3,1))
+	col1, col2, col3= st.columns((2.5,0.3,1))
 
 	with col1:
 		st.image(path+"logo.png", width = 500)
@@ -114,7 +114,7 @@ def main():
 		
 
 
-	col5, col6 = st.beta_columns(2)
+	col5, col6 = st.columns(2)
 
 	if clean_command and web_address:
 		# Getting the Soup and images of the webpage
@@ -304,7 +304,7 @@ def main():
 				# st.write(image_score_record)
 				st.image(st.session_state.image_list[st.session_state.displayed_image_number].attrs['src'], use_column_width=True)
 			if st.session_state.displayed_image_number == -1:
-				st.image(path+"no_image.png", use_column_width=True)
+				st.image(path+"/no_image.png", use_column_width=True)
 
 
 main()
