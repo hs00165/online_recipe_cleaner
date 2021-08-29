@@ -9,6 +9,7 @@ from numpy import genfromtxt
 import online_funcs
 import pandas as pd
 import pickle
+import os
 
 #from nltk.stem import PorterStemmer
 #from nltk.tokenize import word_tokenize
