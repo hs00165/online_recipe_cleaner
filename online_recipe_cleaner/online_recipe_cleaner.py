@@ -34,50 +34,178 @@ def main():
 	# Use the full page instead of a narrow central column
 	st.set_page_config(layout="wide")
 
-	st.title("Recipe Cleaner")
+	image_scores = []
+	image_string = ""
 
-	st.subheader("An A.I. powered app designed to bypass food blogs and generate an easy-to-follow recipe.")
-	st.write("Harrison Sims")
 
-	col1, col2 = st.beta_columns((3,1))
 
+	# Declaring the session_state variables
+	if 'section_list_prettify_state' not in st.session_state:
+	    st.session_state.section_list_prettify_state = []
+	if 'cleaned_flag' not in st.session_state:
+	    st.session_state.cleaned_flag = 0
+	if 'ingredients_record_score' not in st.session_state:
+	    st.session_state.ingredients_record_score = 0
+	if 'instructions_record_score' not in st.session_state:
+	    st.session_state.instructions_record_score = 0	
+	if 'ingredient_element_number' not in st.session_state:
+	    st.session_state.ingredient_element_number = 0
+	if 'instructions_element_number' not in st.session_state:
+	    st.session_state.instructions_element_number = 0	
+	if 'image_list' not in st.session_state:
+	    st.session_state.image_list = []
+	if 'website_title_list' not in st.session_state:
+	    st.session_state.website_title_list = []	
+	if 'first_title' not in st.session_state:
+	    st.session_state.first_title = []
+	if 'displayed_image_number' not in st.session_state:
+	    st.session_state.displayed_image_number = -1
+	if 'access_denied_flag' not in st.session_state:
+	    st.session_state.access_denied_flag = 0
+	if 'section_model_matrix' not in st.session_state:
+	    st.session_state.section_model_matrix = []
+	if 'section_disp_matrix' not in st.session_state:
+	    st.session_state.section_disp_matrix = []
+
+
+
+
+	col1, col2, col3= st.beta_columns((2.5,0.3,1))
 
 	with col1:
+		st.image("logo.png", width = 500)
+		st.subheader("An A.I.-powered app designed to bypass food blogs and generate an easy-to-follow recipe.")
+		st.write("By Harrison Sims")
+		st.write("")
+		st.write("")
 		web_address=st.text_input("Recipe web address:")
+		debug_command = st.checkbox("Debug output to terminal?")
+		st.write("")
+		st.write("")
 
 
 	with col2:
-		st.write(" ")
-		st.write(" ")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
+		st.write("")
 		clean_command = st.button("Clean!")
+		
 
-	col3, col4 = st.beta_columns(2)
 
+	col5, col6 = st.beta_columns(2)
 
-	if clean_command:
+	if clean_command and web_address:
+		# Getting the Soup and images of the webpage
+		st.session_state.displayed_image_number = -1
+		soup, st.session_state.image_list = online_funcs.pull_webpage(web_address)
+
 		# Now need to pull in section list from the webpage and generate the vector for each section
-		section_list, section_list_prettify = online_funcs.get_section_list(web_address)
-		section_matrix = []
+	
 
-		for section in section_list:
-		    # = Editting the section to have no punctuation, use stemming be form a list =
-		    # ============================================================================
-		    final_section_text = online_funcs.process_section(section)
-		    section_matrix.append(final_section_text)
+		st.session_state.cleaned_flag = 1
+		st.session_state.currentImage = 0
+		st.session_state.access_denied_flag = 0
 
-		ingredients_record_score = 0.0
-		instructions_record_score = 0.0
+
+
+
+		# # Step 1
+		# section_list, section_list_prettify = online_funcs.get_section_list(soup)
+		# st.session_state.section_list_prettify_state = section_list_prettify
+
+
+		# IDEA!!!
+		# Sometimes, different parts of the instructions are split up by header tags.
+		# This makes my code think that it should treat them separately, and only select 
+		# one part as the instructions. Obviously this is not great...
+		# A solution:
+		# IF there are no header tags within a header (eg, no h5 within h4)
+		# AND there are a few of these headers in a row ( h4, h4, h4)
+		# THEN creat another section that has these sections grouped together!
+		# Note this sounds pretty difficult to implement...
+		# To achieve this, just compare the current header with the last one:
+		# if they are the same, try adding them together!
+
+
+
+
+		# Generating the matix of sections for:
+		# 1) The model to evaluate:   section_model_matrix
+		# 2) To display to the user:  section_disp_matrix
+		st.session_state.section_model_matrix, st.session_state.section_disp_matrix = online_funcs.TEMP_get_section_list(soup)
+
+
+		# I see BS at this point...
+		# for sect in st.session_state.section_model_matrix:
+		# 	print(sect)
+
+
+		# testy_final_prettify_section_list, testy_final_text_section_list = online_funcs.TEMP_get_section_list(soup)
+		# print(len(testy_final_prettify_section_list))
+		# print(len(testy_final_text_section_list))
+
+
+
+
+		if len(st.session_state.section_model_matrix) <=5:
+			st.session_state.access_denied_flag = 1
+
+		if debug_command:
+			print("")
+			print("      *** DEBUG OUTPUT ***       ")
+			print("")
+			print(soup.prettify())
+
+		
+		# section_matrix = []
+		# for section in section_list:
+		# 	# = Editting the section to have no punctuation, use stemming be form a list =
+		# 	# ============================================================================
+		# 	final_section_text = online_funcs.process_section(section)
+		# 	section_matrix.append(final_section_text)
+		# 	if debug_command:
+		# 		print(final_section_text)
+
+		st.session_state.ingredients_record_score = 0.0
+		st.session_state.instructions_record_score = 0.0
 		section_count = 0
-		ingredient_element_number = -1
-		instructions_element_number = -1
+		st.session_state.ingredient_element_number = -1
+		st.session_state.instructions_element_number = -1
 
-		for section in section_matrix:
+		st.session_state.website_title_list = online_funcs.get_title(soup)
+		st.session_state.first_title = online_funcs.process_title(st.session_state.website_title_list[0])
+		# print("*******")
+		# print(st.session_state.website_title_list[0])
+		# print(st.session_state.first_title)
+		for section in st.session_state.section_model_matrix:
 
-			if(len(section) >= 5):
+			# print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+			# print(section)
 
-				section_temp = [word for word in section if not word in stopwords.words('english')]
-				section_sub = online_funcs.listToString(section_temp)
+			if(len(section) >= 5) and len(online_funcs.listToString(section)) < 5000:
+
+				# section_temp = [word for word in section if not word in stopwords.words('english')]
+				section_sub = online_funcs.listToString(section)
 				section_test = [section_sub]
+
 
 				ingredients_section_vector = ingredients_cv.transform(section_test)
 				ingredients_prediction = ingredients_model.predict_proba(ingredients_section_vector)
@@ -87,57 +215,93 @@ def main():
 
 				# For diagnosing when it doesn't work
 				# if instructions_prediction[0,1] >= 0.90:
-				# 	print("==== "+str(instructions_prediction[0,1])+" ====")
-				# 	print(section_test)
-				# 	print("")
+				print("==== "+str(instructions_prediction[0,1])+" ===="+str(ingredients_prediction[0,1]))
+				print(section_test)
+				print("")
 
-				if ingredients_prediction[0,1] >= ingredients_record_score:
-					ingredients_record_score = ingredients_prediction[0,1]
-					ingredient_element_number = section_count
+				if ingredients_prediction[0,1] >= st.session_state.ingredients_record_score:
+					st.session_state.ingredients_record_score = ingredients_prediction[0,1]
+					st.session_state.ingredient_element_number = section_count
 
-				if instructions_prediction[0,1] >= instructions_record_score:
-					instructions_record_score = instructions_prediction[0,1]
-					instructions_element_number = section_count
+				if instructions_prediction[0,1] >= st.session_state.instructions_record_score:
+					st.session_state.instructions_record_score = instructions_prediction[0,1]
+					st.session_state.instructions_element_number = section_count
 
 
 			section_count+=1
 
 
-		with col3:
-			if ingredients_record_score >= 0.3:
-				st.subheader("Ingredients")
-				st.success("Score = "+str(ingredients_record_score*100.)+" %")
+	if st.session_state.cleaned_flag == 1:
+
+		with col1:
+			st.write("")
+			st.write("")
+			st.title(st.session_state.website_title_list[0])
+			if st.session_state.access_denied_flag == 1:
+				st.error("Uh oh... - Website access denied :(")
+				st.write("Please try another website.")
+
+		with col5:
+			st.subheader("Ingredients")
+			if st.session_state.ingredients_record_score >= 0.3:
+				st.success("Succesfully identified the Ingredients.")
+				st.success("Prediction score = "+str(st.session_state.ingredients_record_score*100.)+" %")
 				st.write("")
-				for i in online_funcs.format_section(section_list_prettify[ingredient_element_number]):
+				for i in st.session_state.section_disp_matrix[st.session_state.ingredient_element_number]:
 					if i.isspace() == False and len(i) > 0:
 						st.write("-- "+str(i))
 			else:
-				st.error("        ***WARNING***")
-				st.write(" ")
-				st.error(" cannot identify ingredients with certainty")
-				st.error(" Score = "+str(ingredients_record_score*100.)+" %")
-				st.write("")
-				for j in online_funcs.format_section(section_list_prettify[ingredient_element_number]):
-					if j.isspace() == False and len(j) > 0:
-						st.write("-- "+str(j))
+				if st.session_state.access_denied_flag == 0:
+					st.error("***WARNING***: Cannot identify ingredients with certainty.")
+					st.error("Prediction score = "+str(st.session_state.instructions_record_score*100.)+" %")
+					st.write("")
+					for j in st.session_state.section_disp_matrix[st.session_state.ingredient_element_number]:
+						if j.isspace() == False and len(j) > 0:
+							st.write("-- "+str(j))
 
-		with col4:
-			if instructions_record_score >= 0.3:
-				st.subheader("Instructions")
-				st.success("Score = "+str(instructions_record_score*100.)+" %")
+		with col6:
+			st.subheader("Instructions")
+			if st.session_state.instructions_record_score >= 0.3:
+				st.success("Succesfully identified the Instructions.")
+				st.success("Prediction score = "+str(st.session_state.instructions_record_score*100.)+" %")
 				st.write("")
-				for k in online_funcs.format_section(section_list_prettify[instructions_element_number]):
+				for k in st.session_state.section_disp_matrix[st.session_state.instructions_element_number]:
 					if k.isspace() == False and len(k) > 0:
 						st.write("-- "+str(k))
 			else:
-				st.error("        ***WARNING***")
-				st.write(" ")
-				st.error(" cannot identify instructions with certainty")
-				st.error(" Score = "+str(instructions_record_score*100.)+" %")
-				st.write("")
-				for l in online_funcs.format_section(section_list_prettify[instructions_element_number]):
-					if l.isspace() == False and len(l) > 0:
-						st.write("-- "+str(l))
+				if st.session_state.access_denied_flag == 0:
+					st.error("***WARNING***: Cannot identify instructions with certainty.")
+					st.error("Prediction score = "+str(st.session_state.instructions_record_score*100.)+" %")
+					st.write("")
+					for l in st.session_state.section_disp_matrix[st.session_state.instructions_element_number]:
+						if l.isspace() == False and len(l) > 0:
+							st.write("-- "+str(l))
+
+
+
+	with col3:
+
+		if st.session_state.cleaned_flag == 1 and len(st.session_state.image_list) >= 1:
+
+			nImages = len(st.session_state.image_list)
+			
+			image_score_record = 0
+			for imageNum in range(nImages):
+				image_string = str(st.session_state.image_list[imageNum].attrs['src'])
+				image_score = online_funcs.match_title_score(st.session_state.first_title, image_string)
+
+				if image_score > image_score_record and "http" in image_string:
+					# print(image_string)
+					# print(image_score)
+					image_score_record = image_score
+					st.session_state.displayed_image_number = imageNum
+
+			if st.session_state.displayed_image_number != -1:
+				# st.write(st.session_state.image_list[st.session_state.displayed_image_number].attrs['src'])
+				# st.write(image_score_record)
+				st.image(st.session_state.image_list[st.session_state.displayed_image_number].attrs['src'], use_column_width=True)
+			if st.session_state.displayed_image_number == -1:
+				st.image("no_image.png", use_column_width=True)
 
 
 main()

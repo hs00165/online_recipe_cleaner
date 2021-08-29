@@ -15,6 +15,7 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import nltk
+import online_funcs
 nltk.download('stopwords')
 
 # test
@@ -486,7 +487,11 @@ def generate_training_example_ingredients(web_address):
 
 	# ========================== Accessing the webpage =============================
 	# ==============================================================================
-	section_list, section_list_prettify = get_section_list_test(web_address)
+	# section_list, section_list_prettify = get_section_list_test(web_address)
+	page = requests.get(web_address)
+	soup = BeautifulSoup(page.text, 'html.parser')
+	section_list, section_list_prettify = online_funcs.TEMP_get_section_list(soup)
+
 	heading_list = get_heading_list(web_address)
 
 	# ======= Getting the ingredients list using the recipe_scraper library ========
@@ -504,34 +509,42 @@ def generate_training_example_ingredients(web_address):
 	comb_sim_score = []
 	section_sub = []
 
-	for section in section_list:
+	section_matrix, section_disp_matrix = online_funcs.TEMP_get_section_list(soup)
+
+	for final_section_text in section_matrix:
 	    # = Editting the section to have no punctuation, use stemming be form a list =
 	    # ============================================================================
-	    final_section_text = process_section(section)
-	    section_matrix.append(final_section_text)
+
+
+		# final_section_text = process_section(section)
+		# section_matrix.append(final_section_text)
+
+		# print("DEBUG TEST HELOOOOOOO-----------------------------------------------")
+		# print(final_section_text)
 
 	    # Determining the "ingredient similarity score" using two methods, and taking
 	    # their product for the final score.
-	    sim_score1 = match_score(final_section_text, final_ingredients_list, 1)
-	    sim_score2 = match_score(final_section_text, final_ingredients_list, 2)
+		sim_score1 = match_score(final_section_text, final_ingredients_list, 1)
+		sim_score2 = match_score(final_section_text, final_ingredients_list, 2)
 	    # print("score1:  "+str(sim_score1)+"    "+str(sim_score1*sim_score2))
 	    # print("score2:  "+str(sim_score2))
 
-	    comb_sim_score.append(sim_score1*sim_score2)
-	    if sim_score1*sim_score2 > sim_score_record:
-	        sim_score_record = sim_score1*sim_score2
-	        sim_score_record_count = section_count
-	    section_count += 1
+		comb_sim_score.append(sim_score1*sim_score2)
+		if sim_score1*sim_score2 > sim_score_record:
+			sim_score_record = sim_score1*sim_score2
+			sim_score_record_count = section_count
+		section_count += 1
 
 	with open('../data/training_data_ingredients_file.csv', 'a', newline='') as training_data_file:
 		csvwriter = csv.writer(training_data_file)
 		section_count = 0
 		for section in section_matrix:
-			if(len(section) >= 5):
+			if(len(section) >= 5) and len(listToString(section)) < 5000:
 				# remove stop words for training data (NOTE this is a slow process...)
 				section_temp = [word for word in section if not word in stopwords.words('english')]
 
 				section_sub.insert(0,listToString(section_temp))
+
 
 				if section_count == sim_score_record_count:
 					section_sub.insert(0,web_address)
@@ -569,12 +582,18 @@ def generate_training_example_instructions(web_address):
 
 	# ========================== Accessing the webpage =============================
 	# ==============================================================================
-	section_list, section_list_prettify = get_section_list_test(web_address)
+	# section_list, section_list_prettify = get_section_list_test(web_address)
+	page = requests.get(web_address)
+	soup = BeautifulSoup(page.text, 'html.parser')
+	section_list, section_list_prettify = online_funcs.TEMP_get_section_list(soup)
+
 	heading_list = get_heading_list(web_address)
 
 	# ======= Getting the ingredients list using the recipe_scraper library ========
 	# ==============================================================================
 	final_instructions_list = get_instructions(web_address)
+	final_instructions_list = [word for word in final_instructions_list if not word in stopwords.words('english')]
+
 
 	# =========================================================================
 	# Looping through each section, extracting the individual words and scoring 
@@ -587,11 +606,13 @@ def generate_training_example_instructions(web_address):
 	comb_sim_score = []
 	section_sub = []
 
-	for section in section_list:
+	section_matrix, section_disp_matrix = online_funcs.TEMP_get_section_list(soup)
+
+	for final_section_text in section_matrix:
 	    # = Editting the section to have no punctuation, use stemming be form a list =
 	    # ============================================================================
-	    final_section_text = process_section(section)
-	    section_matrix.append(final_section_text)
+	    # final_section_text = process_section(section)
+	    # section_matrix.append(final_section_text)
 
 	    # Determining the "ingredient similarity score" using two methods, and taking
 	    # their product for the final score.
@@ -610,20 +631,24 @@ def generate_training_example_instructions(web_address):
 		csvwriter = csv.writer(training_data_file)
 		section_count = 0
 		for section in section_matrix:
-			if(len(section) >= 5):
+			if len(section) >= 5 and len(listToString(section)) < 5000:
+				# print("TTTTTTTTTTTTTTTTTTTTTTTTT")
+				# print(len(section))
 				# remove stop words for training data (NOTE this is a slow process...)
-				section_temp = [word for word in section if not word in stopwords.words('english')]
+				# section_temp = [word for word in section if not word in stopwords.words('english')]
 
-				section_sub.insert(0,listToString(section_temp))
+				section_sub.insert(0,listToString(section))
 
 				if section_count == sim_score_record_count:
 					section_sub.insert(0,web_address)
 					section_sub.insert(0,comb_sim_score[section_count])
+					# section_sub.insert(0,len(listToString(section)))
 					section_sub.insert(0,1)
 					csvwriter.writerow(section_sub)
 				else:
 					section_sub.insert(0,web_address)
 					section_sub.insert(0,comb_sim_score[section_count])
+					# section_sub.insert(0,len(listToString(section)))
 					section_sub.insert(0,0)
 					csvwriter.writerow(section_sub)
 			section_count += 1

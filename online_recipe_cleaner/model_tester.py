@@ -36,6 +36,13 @@ instructions_cv = pickle.load(open("instructions_vectorizer.pkl","rb"))
 section_list, section_list_prettify = online_funcs.get_section_list(web_address)
 section_matrix = []
 
+image_list = online_funcs.get_image(web_address)
+
+print("///////////////////////////////")
+
+for image in image_list:
+	print(image.attrs['src'])
+
 for section in section_list:
     # = Editting the section to have no punctuation, use stemming be form a list =
     # ============================================================================
