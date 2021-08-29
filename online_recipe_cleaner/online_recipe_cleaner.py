@@ -19,11 +19,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 
-ingredients_model = pickle.load(open("ingredients_model.pkl","rb"))
-ingredients_cv = pickle.load(open("ingredients_vectorizer.pkl","rb"))
+ingredients_model = pickle.load(open("/ingredients_model.pkl","rb"))
+ingredients_cv = pickle.load(open("/ingredients_vectorizer.pkl","rb"))
 
-instructions_model = pickle.load(open("instructions_model.pkl","rb"))
-instructions_cv = pickle.load(open("instructions_vectorizer.pkl","rb"))
+instructions_model = pickle.load(open("/instructions_model.pkl","rb"))
+instructions_cv = pickle.load(open("/instructions_vectorizer.pkl","rb"))
 
 
 
@@ -205,7 +205,6 @@ def main():
 				# section_temp = [word for word in section if not word in stopwords.words('english')]
 				section_sub = online_funcs.listToString(section)
 				section_test = [section_sub]
-
 
 				ingredients_section_vector = ingredients_cv.transform(section_test)
 				ingredients_prediction = ingredients_model.predict_proba(ingredients_section_vector)
