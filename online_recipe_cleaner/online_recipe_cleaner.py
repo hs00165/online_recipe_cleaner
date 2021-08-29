@@ -83,7 +83,7 @@ def main():
 		st.write("")
 		st.write("")
 		web_address=st.text_input("Recipe web address:")
-		debug_command = st.checkbox("Debug output to terminal?")
+		# debug_command = st.checkbox("Debug output to terminal?")
 		st.write("")
 		st.write("")
 
@@ -172,11 +172,11 @@ def main():
 		if len(st.session_state.section_model_matrix) <=5:
 			st.session_state.access_denied_flag = 1
 
-		if debug_command:
-			print("")
-			print("      *** DEBUG OUTPUT ***       ")
-			print("")
-			print(soup.prettify())
+		# if debug_command:
+		# 	print("")
+		# 	print("      *** DEBUG OUTPUT ***       ")
+		# 	print("")
+		# 	print(soup.prettify())
 
 		
 		# section_matrix = []
