@@ -3,4 +3,4 @@ BeautifulSoup4
 pandas
 streamlit
 nltk
-pickle
+pickle-mixin
