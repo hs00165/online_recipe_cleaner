@@ -112,9 +112,9 @@ def main():
 		st.write("")
 		clean_command = st.button("Clean!")
 		
-
-	with col3:
-		st.image(path+"/Wordcloud.png", use_column_width=True)
+	if clean_command==False:
+		with col3:
+			st.image(path+"/Wordcloud.png", use_column_width=True)
 
 
 	col5, col6 = st.columns(2)
