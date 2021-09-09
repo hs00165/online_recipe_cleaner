@@ -114,7 +114,7 @@ def main():
 		
 
 	with col3:
-		st.image(path+"/Wordcloud.png", width = 300)
+		st.image(path+"/Wordcloud.png", width = 650)
 
 
 	col5, col6 = st.columns(2)
