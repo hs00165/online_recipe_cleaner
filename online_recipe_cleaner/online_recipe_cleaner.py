@@ -113,6 +113,9 @@ def main():
 		clean_command = st.button("Clean!")
 		
 
+	with col3:
+		st.image(path+"/Wordcloud.png", width = 300)
+
 
 	col5, col6 = st.columns(2)
 
