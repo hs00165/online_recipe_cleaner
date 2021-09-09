@@ -78,8 +78,8 @@ def main():
 
 	with col1:
 		st.image(path+"/logo.PNG", width = 500)
-		st.subheader("An A.I.-powered app designed to bypass food blogs and generate an easy-to-follow recipe.")
-		st.write("By Harrison Sims - for personal use only.")
+		st.subheader("An A.I.-powered application designed to bypass food blogs and generate an easy-to-follow recipe.")
+		st.write("By Harrison Sims")
 		st.write("")
 		st.write("")
 		web_address=st.text_input("Recipe web address:")
