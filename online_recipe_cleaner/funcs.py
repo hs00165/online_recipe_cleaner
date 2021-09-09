@@ -10,6 +10,7 @@ from recipe_scrapers import scrape_me
 import re
 import io
 import textwrap
+import matplotlib.pyplot as plt
 
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
@@ -535,13 +536,21 @@ def generate_training_example_ingredients(web_address):
 			sim_score_record_count = section_count
 		section_count += 1
 
+	f = open("../data/wordcloud_text.txt","a+")
+    
+    
+
 	with open('../data/training_data_ingredients_file.csv', 'a', newline='') as training_data_file:
 		csvwriter = csv.writer(training_data_file)
 		section_count = 0
 		for section in section_matrix:
 			if(len(section) >= 5) and len(listToString(section)) < 5000:
 				# remove stop words for training data (NOTE this is a slow process...)
+
+
+
 				section_temp = [word for word in section if not word in stopwords.words('english')]
+
 
 				section_sub.insert(0,listToString(section_temp))
 
@@ -551,6 +560,7 @@ def generate_training_example_ingredients(web_address):
 					section_sub.insert(0,comb_sim_score[section_count])
 					section_sub.insert(0,1)
 					csvwriter.writerow(section_sub)
+					f.write(" ".join(section_disp_matrix[section_count])+" ")
 				else:
 					section_sub.insert(0,web_address)
 					section_sub.insert(0,comb_sim_score[section_count])
@@ -559,7 +569,7 @@ def generate_training_example_ingredients(web_address):
 			section_count += 1
 			section_sub = []
 
-
+	f.close()
 
 	print("")
 	print("")
@@ -664,3 +674,25 @@ def generate_training_example_instructions(web_address):
 	print("")
 	print(section_matrix[sim_score_record_count])
 	print("====================================================")
+
+
+
+
+
+
+def word_cloud_list_gen():
+
+	f = open("../data/wordcloud_text.txt","r")
+
+	contents =f.read()
+
+	return contents
+
+
+
+
+
+def plot_cloud(wordcloud):
+	plt.figure(figsize=(40,30))
+	plt.imshow(wordcloud)
+	plt.axis("off");

@@ -334,6 +334,13 @@ def TEMP_process_section_for_model(section):
 
     section_text = [word for word in section_text if not word in stopwords.words('english')]
 
+
+    
+
+
+
+
+
     for word in section_text:
         condensed_section_text.append(word.translate(str.maketrans('', '', string.punctuation)))
     # Stemming the strings to simpler terms
@@ -471,6 +478,21 @@ def clean_string(input_string):
 				output_string = output_string + element
 
 	return output_string
+
+def clean_string_no_numbers(input_string):
+	acceptable_characters = ["a","b","c","d","e","f","g","h","i","j",
+	"k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+	"A","B","C","D","E","F","G",
+	"H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W",
+	"X","Y","Z"]
+	output_string = ""
+
+	for element in input_string:
+		for character in acceptable_characters:
+			if element == character:
+				output_string = output_string + element
+
+	return output_string.lower()
 
 
 
