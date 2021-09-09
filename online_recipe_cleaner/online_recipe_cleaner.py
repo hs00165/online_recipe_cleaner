@@ -74,7 +74,7 @@ def main():
 
 
 
-	col1, col2, col3= st.columns((2.5,0.3,1))
+	col1, col2, col3= st.columns((2.5,0.18,1))
 
 	with col1:
 		st.image(path+"/logo.PNG", width = 500)
