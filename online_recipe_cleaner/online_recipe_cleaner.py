@@ -236,8 +236,11 @@ def main():
 
 			section_count+=1
 
+	
 
 	if st.session_state.cleaned_flag == 1:
+
+		download_string = ''
 
 		with col1:
 			st.write("")
@@ -256,6 +259,7 @@ def main():
 				for i in st.session_state.section_disp_matrix[st.session_state.ingredient_element_number]:
 					if i.isspace() == False and len(i) > 0:
 						st.write("-- "+str(i))
+						download_string = download_string +"\n-- "+str(i)
 			else:
 				if st.session_state.access_denied_flag == 0:
 					st.error("***WARNING***: Cannot identify ingredients with certainty.")
@@ -264,6 +268,7 @@ def main():
 					for j in st.session_state.section_disp_matrix[st.session_state.ingredient_element_number]:
 						if j.isspace() == False and len(j) > 0:
 							st.write("-- "+str(j))
+							download_string = download_string +"\n-- "+str(j)
 
 		with col6:
 			st.subheader("Instructions")
@@ -274,6 +279,7 @@ def main():
 				for k in st.session_state.section_disp_matrix[st.session_state.instructions_element_number]:
 					if k.isspace() == False and len(k) > 0:
 						st.write("-- "+str(k))
+						download_string = download_string +"\n-- "+str(k)
 			else:
 				if st.session_state.access_denied_flag == 0:
 					st.error("***WARNING***: Cannot identify instructions with certainty.")
@@ -282,6 +288,7 @@ def main():
 					for l in st.session_state.section_disp_matrix[st.session_state.instructions_element_number]:
 						if l.isspace() == False and len(l) > 0:
 							st.write("-- "+str(l))
+							download_string = download_string +"\n-- "+str(l)
 
 
 
@@ -310,9 +317,7 @@ def main():
 				st.image(path+"/no_image.PNG", use_column_width=True)
 
 
-	text_contents = "test string. Hello world?"
-
 	if(clean_command):
-		st.download_button('Download Recipe', text_contents, 'text_test.txt')
+		st.download_button('Download Recipe!', download_string, 'text_test.txt')
 
 main()
