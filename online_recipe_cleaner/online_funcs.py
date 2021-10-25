@@ -37,10 +37,6 @@ def pull_webpage(web_address):
 
 
 
-
-
-
-
 def match_score(section_list, final_ingredients_list, toggle_score_method):
 
 	score = 0
@@ -64,8 +60,6 @@ def match_score(section_list, final_ingredients_list, toggle_score_method):
 	return score
 
 
-# def TEMP_get_section_list(soup):
-
 
 
 def TEMP_get_section_list(soup):
@@ -83,10 +77,6 @@ def TEMP_get_section_list(soup):
 	li_flag = 0
 	p_flag = 0
 	temp_flag = 0
-
-
-	# Conditions for web scraping:
-	# 1) 
 
 
 	prettified_webpage = soup.prettify()
