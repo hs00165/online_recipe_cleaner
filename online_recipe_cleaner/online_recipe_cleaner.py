@@ -323,7 +323,7 @@ def main():
 				st.image(path+"/no_image.PNG", use_column_width=True)
 
 
-	if st.session_state.cleaned_flag == 1			
+	if st.session_state.cleaned_flag == 1:		
 		with col1:
 			st.download_button('DOWNLOAD RECIPE!', download_string, download_file_name)
 
