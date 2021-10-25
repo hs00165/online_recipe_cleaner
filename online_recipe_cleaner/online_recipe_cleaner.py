@@ -241,6 +241,7 @@ def main():
 	if st.session_state.cleaned_flag == 1:
 
 		download_string = ' '.join(st.session_state.first_title) + "\n\n ========   Ingredients ========\n" 
+		download_file_name = '_'.join(st.session_state.first_title)+'.txt'
 
 		with col1:
 			st.write("")
