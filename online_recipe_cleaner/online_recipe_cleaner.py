@@ -119,6 +119,8 @@ def main():
 
 	col5, col6 = st.columns(2)
 
+	
+
 	if clean_command and web_address:
 		# Getting the Soup and images of the webpage
 		st.session_state.displayed_image_number = -1
@@ -126,6 +128,9 @@ def main():
 
 		# Now need to pull in section list from the webpage and generate the vector for each section
 	
+		with col1:
+			st.download_button('DOWNLOAD RECIPE!', download_string, download_file_name)
+
 
 		st.session_state.cleaned_flag = 1
 		st.session_state.currentImage = 0
@@ -320,7 +325,5 @@ def main():
 				st.image(path+"/no_image.PNG", use_column_width=True)
 
 
-	if(clean_command):
-		st.download_button('Download Recipe!', download_string, 'text_test.txt')
-
+	
 main()
