@@ -310,4 +310,9 @@ def main():
 				st.image(path+"/no_image.PNG", use_column_width=True)
 
 
+	text_contents = "test string. Hello world?"
+
+	if(clean_command):
+		st.download_button('Download Recipe', text_contents, 'text_test.txt')
+
 main()
