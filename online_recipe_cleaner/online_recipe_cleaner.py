@@ -11,11 +11,7 @@ import pandas as pd
 import pickle
 import os
 
-#from nltk.stem import PorterStemmer
-#from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-
-
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
@@ -126,53 +122,16 @@ def main():
 		st.session_state.displayed_image_number = -1
 		soup, st.session_state.image_list = online_funcs.pull_webpage(web_address)
 
-		# Now need to pull in section list from the webpage and generate the vector for each section
-	
-		
-
 		st.session_state.cleaned_flag = 1
 		st.session_state.currentImage = 0
 		st.session_state.access_denied_flag = 0
 
-
-
-
-		# # Step 1
-		# section_list, section_list_prettify = online_funcs.get_section_list(soup)
-		# st.session_state.section_list_prettify_state = section_list_prettify
-
-
-		# IDEA!!!
-		# Sometimes, different parts of the instructions are split up by header tags.
-		# This makes my code think that it should treat them separately, and only select 
-		# one part as the instructions. Obviously this is not great...
-		# A solution:
-		# IF there are no header tags within a header (eg, no h5 within h4)
-		# AND there are a few of these headers in a row ( h4, h4, h4)
-		# THEN creat another section that has these sections grouped together!
-		# Note this sounds pretty difficult to implement...
-		# To achieve this, just compare the current header with the last one:
-		# if they are the same, try adding them together!
-
-
-
+		# Now need to pull in section list from the webpage and generate the vector for each section
 
 		# Generating the matix of sections for:
 		# 1) The model to evaluate:   section_model_matrix
 		# 2) To display to the user:  section_disp_matrix
 		st.session_state.section_model_matrix, st.session_state.section_disp_matrix = online_funcs.TEMP_get_section_list(soup)
-
-
-		# I see BS at this point...
-		# for sect in st.session_state.section_model_matrix:
-		# 	print(sect)
-
-
-		# testy_final_prettify_section_list, testy_final_text_section_list = online_funcs.TEMP_get_section_list(soup)
-		# print(len(testy_final_prettify_section_list))
-		# print(len(testy_final_text_section_list))
-
-
 
 
 		if len(st.session_state.section_model_matrix) <=5:
@@ -185,15 +144,6 @@ def main():
 		# 	print(soup.prettify())
 
 		
-		# section_matrix = []
-		# for section in section_list:
-		# 	# = Editting the section to have no punctuation, use stemming be form a list =
-		# 	# ============================================================================
-		# 	final_section_text = online_funcs.process_section(section)
-		# 	section_matrix.append(final_section_text)
-		# 	if debug_command:
-		# 		print(final_section_text)
-
 		st.session_state.ingredients_record_score = 0.0
 		st.session_state.instructions_record_score = 0.0
 		section_count = 0
@@ -202,17 +152,11 @@ def main():
 
 		st.session_state.website_title_list = online_funcs.get_title(soup)
 		st.session_state.first_title = online_funcs.process_title(st.session_state.website_title_list[0])
-		# print("*******")
-		# print(st.session_state.website_title_list[0])
-		# print(st.session_state.first_title)
+		
 		for section in st.session_state.section_model_matrix:
-
-			# print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-			# print(section)
 
 			if(len(section) >= 5) and len(online_funcs.listToString(section)) < 5000:
 
-				# section_temp = [word for word in section if not word in stopwords.words('english')]
 				section_sub = online_funcs.listToString(section)
 				section_test = [section_sub]
 
@@ -224,9 +168,9 @@ def main():
 
 				# For diagnosing when it doesn't work
 				# if instructions_prediction[0,1] >= 0.90:
-				print("==== "+str(instructions_prediction[0,1])+" ===="+str(ingredients_prediction[0,1]))
-				print(section_test)
-				print("")
+					# print("==== "+str(instructions_prediction[0,1])+" ===="+str(ingredients_prediction[0,1]))
+					# print(section_test)
+					# print("")
 
 				if ingredients_prediction[0,1] >= st.session_state.ingredients_record_score:
 					st.session_state.ingredients_record_score = ingredients_prediction[0,1]
@@ -236,10 +180,7 @@ def main():
 					st.session_state.instructions_record_score = instructions_prediction[0,1]
 					st.session_state.instructions_element_number = section_count
 
-
 			section_count+=1
-
-	
 
 	if st.session_state.cleaned_flag == 1:
 
@@ -325,6 +266,8 @@ def main():
 
 	if st.session_state.cleaned_flag == 1:		
 		with col1:
+			st.write("")
+			st.write("")
 			st.download_button('DOWNLOAD RECIPE!', download_string, download_file_name)
 
 	
