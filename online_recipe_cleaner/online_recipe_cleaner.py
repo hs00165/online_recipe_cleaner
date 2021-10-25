@@ -240,7 +240,7 @@ def main():
 
 	if st.session_state.cleaned_flag == 1:
 
-		download_string = ''
+		download_string = str(st.session_state.first_title) + "\n ========   Ingredients ========\n\n" 
 
 		with col1:
 			st.write("")
@@ -276,6 +276,7 @@ def main():
 				st.success("Succesfully identified the Instructions.")
 				st.success("Prediction score = "+str(st.session_state.instructions_record_score*100.)+" %")
 				st.write("")
+				download_string = download_string + "\n========   Instructions ========\n\n"
 				for k in st.session_state.section_disp_matrix[st.session_state.instructions_element_number]:
 					if k.isspace() == False and len(k) > 0:
 						st.write("-- "+str(k))
@@ -285,6 +286,7 @@ def main():
 					st.error("***WARNING***: Cannot identify instructions with certainty.")
 					st.error("Prediction score = "+str(st.session_state.instructions_record_score*100.)+" %")
 					st.write("")
+					download_string = download_string + "\n========   Instructions ========\n\n"
 					for l in st.session_state.section_disp_matrix[st.session_state.instructions_element_number]:
 						if l.isspace() == False and len(l) > 0:
 							st.write("-- "+str(l))
