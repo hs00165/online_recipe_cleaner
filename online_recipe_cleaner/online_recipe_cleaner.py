@@ -128,9 +128,7 @@ def main():
 
 		# Now need to pull in section list from the webpage and generate the vector for each section
 	
-		with col1:
-			st.download_button('DOWNLOAD RECIPE!', download_string, download_file_name)
-
+		
 
 		st.session_state.cleaned_flag = 1
 		st.session_state.currentImage = 0
@@ -324,6 +322,10 @@ def main():
 			if st.session_state.displayed_image_number == -1:
 				st.image(path+"/no_image.PNG", use_column_width=True)
 
+
+	if st.session_state.cleaned_flag == 1			
+		with col1:
+			st.download_button('DOWNLOAD RECIPE!', download_string, download_file_name)
 
 	
 main()
