@@ -70,7 +70,7 @@ def main():
 
 
 
-	col1, col2, col3= st.columns((2.5,0.18,1))
+	col1, col3= st.columns((2.5,1))
 
 	with col1:
 		st.image(path+"/logo.PNG", width = 500)
@@ -81,32 +81,9 @@ def main():
 		web_address=st.text_input("Recipe web address:")
 		# debug_command = st.checkbox("Debug output to terminal?")
 		st.write("")
-		st.write("")
-
-
-	with col2:
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
-		st.write("")
 		clean_command = st.button("Clean!")
+		st.write("")
+
 		
 	if clean_command==False:
 		with col3:
