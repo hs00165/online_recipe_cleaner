@@ -125,7 +125,7 @@ def TEMP_get_section_list(soup):
 			flag = 1
 
 
-		# need seperate flags for each tag:
+		# need to seperate flags for each tag:
 		if "<li" in line:
 			li_flag = 1
 			user_flag = "<li>  "
@@ -140,9 +140,9 @@ def TEMP_get_section_list(soup):
 
 
 
-
+		# Need this to be conditional of being inside a <li> or something similar
 		if "<" not in line and ">" not in line and "{" not in line and "}" not in line and flag == 0 and (li_flag == 1 or p_flag == 1):
-			# Need this to be conditional of being inside a <li> or something similar
+			
 			text_string = text_string + " " + line.strip()
 			step1 = step1 + line
 

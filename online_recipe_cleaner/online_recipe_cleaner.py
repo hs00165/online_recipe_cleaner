@@ -110,26 +110,26 @@ def main():
 		# 2) To display to the user:  section_disp_matrix
 		st.session_state.section_model_matrix, st.session_state.section_disp_matrix = online_funcs.TEMP_get_section_list(soup)
 
-
+		# If I only pull a couple of sections, clearly the website didn't allow
+		# for scraping
 		if len(st.session_state.section_model_matrix) <=5:
 			st.session_state.access_denied_flag = 1
 
-		# if debug_command:
-		# 	print("")
-		# 	print("      *** DEBUG OUTPUT ***       ")
-		# 	print("")
-		# 	print(soup.prettify())
 
-		
+		# Reset the ingredients/instruction scores to zero
 		st.session_state.ingredients_record_score = 0.0
 		st.session_state.instructions_record_score = 0.0
 		section_count = 0
 		st.session_state.ingredient_element_number = -1
 		st.session_state.instructions_element_number = -1
 
+		# Pull and process the website title
 		st.session_state.website_title_list = online_funcs.get_title(soup)
 		st.session_state.first_title = online_funcs.process_title(st.session_state.website_title_list[0])
 		
+		# Loop over the divided sections
+		# Evaluate the probability that each section is either the ingredients or instructions
+		# Return the ones that give the highest probability
 		for section in st.session_state.section_model_matrix:
 
 			if(len(section) >= 5) and len(online_funcs.listToString(section)) < 5000:
@@ -137,6 +137,7 @@ def main():
 				section_sub = online_funcs.listToString(section)
 				section_test = [section_sub]
 
+				# Parsing the sections to the Naive Bayes model for predictions
 				ingredients_section_vector = ingredients_cv.transform(section_test)
 				ingredients_prediction = ingredients_model.predict_proba(ingredients_section_vector)
 
@@ -168,6 +169,7 @@ def main():
 			st.write("")
 			st.write("")
 			st.title(st.session_state.website_title_list[0])
+			#If the website doesn't want to be scraped :-(
 			if st.session_state.access_denied_flag == 1:
 				st.error("Uh oh... - Website access denied :(")
 				st.write("Please try another website.")
@@ -216,8 +218,12 @@ def main():
 
 
 
-	with col3:
+	# Here we are pulling all of the images from the website
+	# (including all of the bloody ads). Then we compare the image
+	# URL names to the recipe title, and return the image that best
+	# matches the description of the recipe title.
 
+	with col3:
 		if st.session_state.cleaned_flag == 1 and len(st.session_state.image_list) >= 1:
 
 			nImages = len(st.session_state.image_list)
@@ -227,6 +233,7 @@ def main():
 				image_string = str(st.session_state.image_list[imageNum].attrs['src'])
 				image_score = online_funcs.match_title_score(st.session_state.first_title, image_string)
 
+				# Find max score and make sure the URL will actually work!
 				if image_score > image_score_record and "http" in image_string:
 					# print(image_string)
 					# print(image_score)
@@ -240,7 +247,7 @@ def main():
 			if st.session_state.displayed_image_number == -1:
 				st.image(path+"/no_image.PNG", use_column_width=True)
 
-
+	# Newly added download button that creates a .txt file of the cleaned recipe!
 	if st.session_state.cleaned_flag == 1:		
 		with col1:
 			st.write("")
